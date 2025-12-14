@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/task_tile.dart';
 import '../models/task.dart';
+import '../services/task_storage_service.dart';
 
 
 
@@ -13,9 +14,25 @@ class TaskListPage extends StatefulWidget {
 
 
 class _TaskListPageState extends State<TaskListPage> {
-  final List<Task> _tasks = [];
+  final TaskStorageService _storage = TaskStorageService();
+  List<Task> _tasks = [];
   final TextEditingController _controller = TextEditingController();
 
+  @override
+    void initState() {
+      super.initState();
+    _loadTasks();
+  }
+
+
+  Future<void> _loadTasks() async {
+    final loaded = await _storage.loadTasks();
+    setState(() => _tasks = loaded);
+  }
+
+  Future<void> _save() async {
+    await _storage.saveTasks(_tasks);
+  }
 
   void _addTask() {
     final text = _controller.text.trim();
@@ -25,6 +42,7 @@ class _TaskListPageState extends State<TaskListPage> {
       _tasks.add(Task(title: text));
       _controller.clear();
     });
+    _save();
   } 
 
   void _toggleTask(int index) {
