@@ -19,7 +19,7 @@ class TaskTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible( // swipe to delete
-      key: ValueKey(task.title),
+      key: ValueKey(task.id),
       direction: DismissDirection.endToStart,
       background: Container(
         color: Colors.red,

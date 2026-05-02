@@ -39,7 +39,7 @@ class _TaskListPageState extends State<TaskListPage> {
     if (text.isEmpty) return;
 
     setState(() {
-      _tasks.add(Task(title: text));
+      _tasks.add(Task.create(text));
       _controller.clear();
     });
     _save();
@@ -51,9 +51,9 @@ class _TaskListPageState extends State<TaskListPage> {
     });
   }
 
-  void _removeTask(int index) {
+  void _removeTask(Task task) {
     setState(() {
-      _tasks.removeAt(index);
+      _tasks.removeWhere((t) => t.id == task.id);
     });
   }
 
@@ -93,7 +93,7 @@ class _TaskListPageState extends State<TaskListPage> {
                 return TaskTile(
                   task: _tasks[index],
                   onToggle: () => _toggleTask(index),
-                  onDelete: () => _removeTask(index),
+                  onDelete: () => _removeTask(_tasks[index])
                 );
               },
             ),
